@@ -1,44 +1,69 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Milestone 6</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Add icon library -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
-        .btn {
-        background-color: DodgerBlue;
-        border: none;
-        color: white;
-        padding: 12px 30px;
-        cursor: pointer;
-        font-size: 20px;
-        }
+  <head>
+    <title>File Handling</title>
+    <link href="https://fonts.googleapis.com/css?family=Lato|Roboto|Source+Code+Pro" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/monokai.min.css">
+    <link rel="stylesheet" href="demo.css">
+  </head>
 
-        /* Darker background on mouse-over */
-        .btn:hover {
-        background-color: RoyalBlue;
-        }
-    </style>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js" integrity="sha512-SGWgwwRA8xZgEoKiex3UubkSkV1zSE1BS6O4pXcaxcNtUlQsOmOmhVnDwIvqGRfEmuz83tIGL13cXMZn6upPyg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-</head>
-<body>
-    <form class="form-inline">
-        <div class="form-group">
-          <label for="files">Step 1: Provide Milestone 3 Input File</label>
-          <input type="file" id="files"  class="form-control" accept=".csv" required />
-        </div>
-        <div class="form-group">
-         <button type="submit" id="submit-file" class="btn btn-primary">Upload File</button>
-        </div>
+  <body>
 
-    </form>
-    <div class="main2">
-        <div class="header">
-          <h1>Step 2: Download Account Verification for Results</h1>
-          <button class="btn"><i class="fa fa-download"></i> Download</button>
-        </div>
+    <div id="header">
+      <h1 id="title">Load from File</h1>
+      <div id="link"><a href="https://github.com/evanplaice/jquery-csv">GitHub</a></div>
     </div>
-</body>
+    <div id="container">
+      <section id="content">
+        <h2>Description</h2>
+        <p>The following demonstrates how to use the HTML5 File API to load a file from the client.</p>
+        <hr>
+        <h2>Input</h2>
+        <input type="file" id="files" name="files[]" multiple />
+        <hr />
+        <h2>FileInfo</h2>
+        <div id="file-info"></div>
+        <hr />
+        <h2>Result</h2>
+        <textarea id="result" style="height: 250px;"></textarea>
+      </section>
+    </div>
+
+    <script src="http://code.jquery.com/jquery-3.3.1.slim.js" integrity="sha256-fNXJFIlca05BIO2Y5zh1xrShK3ME+/lYZ0j+ChxX2DA=" crossorigin="anonymous"></script>
+    <script src="../src/jquery.csv.js"></script>
+    <script src="helpers.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+    <script>
+      // enable syntax highlighting
+      hljs.initHighlightingOnLoad();
+
+      $(document).ready(function() {
+        if(isFileAPIAvailable()) {
+          $('#files').bind('change', handleDialog);
+        }
+      });
+
+      function handleDialog(event) {
+        var files = event.target.files;
+        var file = files[0];
+
+        var fileInfo = `
+          <span style="font-weight:bold;">${escape(file.name)}</span><br>
+          - FileType: ${file.type || 'n/a'}<br>
+          - FileSize: ${file.size} bytes<br>
+          - LastModified: ${file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : 'n/a'}
+        `;
+        $('#file-info').append(fileInfo);
+
+        var reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = function(event){
+          var csv = event.target.result;
+          var data = $.csv.toArrays(csv);
+          $('#result').empty();
+          $('#result').html(JSON.stringify(data, null, 2));
+        }
+      }
+    </script>
+  </body>
 </html>
