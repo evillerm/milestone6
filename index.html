@@ -1,75 +1,81 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>File Handling</title>
-    <link href="https://fonts.googleapis.com/css?family=Lato|Roboto|Source+Code+Pro" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/monokai.min.css">
-    <link rel="stylesheet" href="demo.css">
+
+<head>
+    <title>Milestone 6</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Add icon library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         .btn {
-        background-color: DodgerBlue;
-        border: none;
-        color: white;
-        padding: 12px 30px;
-        cursor: pointer;
-        font-size: 20px;
+            background-color: DodgerBlue;
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            cursor: pointer;
+            font-size: 20px;
         }
 
         /* Darker background on mouse-over */
         .btn:hover {
-        background-color: RoyalBlue;
+            background-color: RoyalBlue;
         }
     </style>
-  </head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.21/jquery.csv.min.js" integrity="sha512-Y8iWYJDo6HiTo5xtml1g4QqHtl/PO1w+dmUpQfQSOTqKNsMhExfyPN2ncNAe9JuJUSKzwK/b6oaNPop4MXzkwg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
 
-  <body>
-    <div id="container">
-      <section id="content">
-        <h2>Step 1: Provide Milestone 3 Input File</h2>
-        <input type="file" id="files" name="files[]" multiple />
-        <h2>Step 2: Download Account Verification for Results</h2>
-        <button class="btn"><i class="fa fa-download"></i> Download</button>
-      </section>
+<body>
+    
+    <div class="main1">
+        <div class="header">
+            <h1>Step 1: Provide Milestone 3 Input File</h1>
+            <!--<form action="/action_page.php">-->
+            <form>
+                <label for="lname">Enter URL of Test Data: </label>
+                <input type="text" id="lname" name="lname"><br><br>
+                <input id="myForm" type="file" value="file upload"/>
+                <input id="submit_btn" type="submit" value="submit"/>
+            </form>
+        </div>
     </div>
-
-    <script src="http://code.jquery.com/jquery-3.3.1.slim.js" integrity="sha256-fNXJFIlca05BIO2Y5zh1xrShK3ME+/lYZ0j+ChxX2DA=" crossorigin="anonymous"></script>
-    <script src="../src/jquery.csv.js"></script>
-    <script src="helpers.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+    <div class="main2">
+        <div class="header">
+            <h1>Step 2: Download Account Verification for Results</h1>
+            <button class="btn"><i class="fa fa-download"></i> Download</button>
+        </div>
+    </div>
     <script>
-      // enable syntax highlighting
-      hljs.initHighlightingOnLoad();
+        const submit_btn = document.getElementById('submit_btn')
+        submit_btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('submit button clicked')
 
-      $(document).ready(function() {
-        if(isFileAPIAvailable()) {
-          $('#files').bind('change', handleDialog);
-        }
-      });
+            let file_upload_form = document.getElementById('myForm')
+            
+            var reader = new FileReader();
+            reader.readAsText(file_upload_form.files[0])
+            reader.onload = function(event) {
+                let csv = event.target.result
+                var items = $.csv.toObjects(csv);
+                var jsonobject = JSON.stringify(items);
+                console.log(jsonobject)
+            }         
+        })
+        
+        //Reading In the local file
+        var fileInput = document.getElementById("csv")
+        readfile = function () {
+            var reader = new FileReader();
+            reader.onload = function () {
+                document.getElementById('out').innerHTML = reader.result;
+            };
+            reader.readAsBinaryString(fileInput.files[0]);
+        };
+        fileInput.addEventListener('change', readfile);
 
-      function handleDialog(event) {
-        var files = event.target.files;
-        var file = files[0];
-
-        var fileInfo = `
-          <span style="font-weight:bold;">${escape(file.name)}</span><br>
-          - FileType: ${file.type || 'n/a'}<br>
-          - FileSize: ${file.size} bytes<br>
-          - LastModified: ${file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : 'n/a'}
-        `;
-        $('#file-info').append(fileInfo);
-
-        var reader = new FileReader();
-        reader.readAsText(file);
-        reader.onload = function(event){
-          var csv = event.target.result;
-          var data = $.csv.toArrays(csv);
-          $('#result').empty();
-          $('#result').html(JSON.stringify(data, null, 2));
-        }
-      }
     </script>
-  </body>
+    
+</body>
+
 </html>

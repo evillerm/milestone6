@@ -9,7 +9,7 @@ download.file(dropBoxURL,destFile, mode = "wb")
 ## read all data
 liveBankAcct = read_csv('liveBankAcct.csv')
 liveCustomerList = read_csv('liveCustomerList.csv')
-sampleBankAccInput = read_csv(destFile)
+sampleBankAccInput = read_csv(destFile) # This is be read in by URL
 # This is not being used for the main data manipulation
 sampleBankAcctSolution = read_csv('sampleBankAcctSolution.csv')
 
