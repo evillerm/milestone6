@@ -60,19 +60,20 @@
                 var items = $.csv.toObjects(csv);
                 var jsonobject = JSON.stringify(items);
                 console.log(jsonobject)
-            }         
-        })
-        
-        //Reading In the local file
-        var fileInput = document.getElementById("csv")
-        readfile = function () {
+            }
+            
+            //Reading In the local file
+            var fileInput = document.getElementById("localcsv/liveBankAcct.csv")
+            console.log('Reading Local CSV')
+            readfile = function () {
             var reader = new FileReader();
             reader.onload = function () {
                 document.getElementById('out').innerHTML = reader.result;
+                console.log(jsonobject)
             };
             reader.readAsBinaryString(fileInput.files[0]);
-        };
-        fileInput.addEventListener('change', readfile);
+            };
+        })
 
     </script>
     
