@@ -50,19 +50,19 @@
             console.log('submit button clicked')
 
             var file_upload_url = document.getElementById("urlInput").value;
-            console.log(file_upload_url);
-            jQuery.getJSON(file_upload_url,"text/csv",function (csvdata) 
-            {
-                alert(csvdata);
-                console.log(csvdata.csvToArray());
-            });
             //console.log(file_upload_url);
-            //fileName = file_upload_url.split("/").pop();
-            //var aLink = document.createElement('a');
-            //aLink.download = fileName;
-            //aLink.href = file_upload_url;
-            //document.body.appendChild(aLink);
-            //aLink.click();
+            //jQuery.getJSON(file_upload_url,"text/csv",function (csvdata) 
+            //{
+            //    alert(csvdata);
+            //    console.log(csvdata.csvToArray());
+            //});
+            //console.log(file_upload_url);
+            fileName = file_upload_url.split("/").pop();
+            var aLink = document.createElement('a');
+            aLink.download = fileName;
+            aLink.href = file_upload_url;
+            document.body.appendChild(aLink);
+            aLink.click();
             //console.log(aLink);
             
             //var reader = new FileReader();
