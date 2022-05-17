@@ -33,8 +33,7 @@
             <!--<form action="/action_page.php">-->
             <form>
                 <label for="lname">Enter URL of Test Data: </label>
-                <input type="text" id="lname" name="lname"><br><br>
-                <input id="myForm" type="file" value="file upload"/>
+                <input type="text" placeholder="Enter URL..." id="urlInput">
                 <input id="submit_btn" type="submit" value="submit"/>
             </form>
         </div>
@@ -46,21 +45,34 @@
         </div>
     </div>
     <script>
-        const submit_btn = document.getElementById('submit_btn')
         submit_btn.addEventListener('click', function(e) {
             e.preventDefault();
             console.log('submit button clicked')
 
-            let file_upload_form = document.getElementById('myForm')
+            var file_upload_url = document.getElementById("urlInput").value;
+            console.log(file_upload_url);
+            jQuery.getJSON(file_upload_url,"text/csv",function (csvdata) 
+            {
+                alert(csvdata);
+                console.log(csvdata.csvToArray());
+            });
+            //console.log(file_upload_url);
+            //fileName = file_upload_url.split("/").pop();
+            //var aLink = document.createElement('a');
+            //aLink.download = fileName;
+            //aLink.href = file_upload_url;
+            //document.body.appendChild(aLink);
+            //aLink.click();
+            //console.log(aLink);
             
-            var reader = new FileReader();
-            reader.readAsText(file_upload_form.files[0])
-            reader.onload = function(event) {
-                let csv = event.target.result
-                var items = $.csv.toObjects(csv);
-                var jsonobject = JSON.stringify(items);
-                console.log(jsonobject)
-            }
+            //var reader = new FileReader();
+            //reader.readAsText(csvdata.files[0])
+            //reader.onload = function(event) {
+            //    let csv = event.target.result
+            //    var items = $.csv.toObjects(csv);
+            //    var jsonobject = JSON.stringify(items);
+            //    console.log(jsonobject)
+            //}
             
             //Reading In the local file
             var fileInput = document.getElementById("localcsv/liveBankAcct.csv")
